@@ -1,0 +1,1 @@
+man/AppPauser.md
