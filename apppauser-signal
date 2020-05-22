@@ -14,11 +14,11 @@ fi
 
 while ! sv check "$1" >/dev/null 2>&1
 do
-    :
+    sleep 0.5
 done
 
 if [ -z "$2" ] ; then
-    if sv status "$1" | grep paused >/dev/null ; then
+    if sv status "$1" | grep "paused" >/dev/null ; then
         ACTION=cont
     else
         ACTION=pause

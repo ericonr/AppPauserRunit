@@ -19,10 +19,18 @@ touch "$DIR/$SERVICE/down"
 
 cat > "$DIR/$SERVICE/run" <<EOF
 #!/bin/sh
-cd $HOME
+$(env | sed -e 's/^/export /' -e 's/=/="/"' 's/' -e 's/$/";/')
+cd $PWD
 exec $@
 EOF
 
 chmod +x "$DIR/$SERVICE/run"
 
 apppauser-signal "$SERVICE" once
+
+if [ -n "$KEEPALIVE" ] ; then
+    while ! apppauser-signal "$SERVICE" status | grep "^down"
+    do
+        sleep 2
+    done
+fi
