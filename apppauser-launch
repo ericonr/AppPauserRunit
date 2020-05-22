@@ -19,7 +19,7 @@ touch "$DIR/$SERVICE/down"
 
 cat > "$DIR/$SERVICE/run" <<EOF
 #!/bin/sh
-$(env | sed -e 's/^/export /' -e 's/=/="/"' 's/' -e 's/$/";/')
+$(env | sed -e 's/^/export /' -e 's/=/="/' -e 's/$/";/')
 cd $PWD
 exec $@
 EOF
