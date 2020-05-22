@@ -1,0 +1,16 @@
+#!/bin/sh
+
+XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+DIR="$XDG_RUNTIME_DIR/${APPPAUSER:-apppauser}"
+
+# check if there is an instance already
+if pgrep -f "runsvdir $DIR" ; then
+    echo "There is an apppauser instance already"
+    exit 1
+fi
+
+echo "Creating directory"
+mkdir -p "$DIR"
+
+echo "Starting runsvdir"
+exec runsvdir "$DIR"

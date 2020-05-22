@@ -1,0 +1,28 @@
+#!/bin/sh
+
+XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+DIR="$XDG_RUNTIME_DIR/${APPPAUSER:-apppauser}"
+
+echo "runsvdir PID:"
+if ! pgrep -f "runsvdir $DIR" ; then
+    echo "There is no instance running"
+    exit 1
+fi
+
+# exit if there are no arguments
+[ -z "$1" ] && echo "Needs an argument" && exit 1
+
+SERVICE="${SERVICE:-$1}"
+mkdir -p "$DIR/$SERVICE"
+
+touch "$DIR/$SERVICE/down"
+
+cat > "$DIR/$SERVICE/run" <<EOF
+#!/bin/sh
+cd $HOME
+exec $@
+EOF
+
+chmod +x "$DIR/$SERVICE/run"
+
+apppauser-signal "$SERVICE" once

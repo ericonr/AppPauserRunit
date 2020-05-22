@@ -1,0 +1,30 @@
+#!/bin/sh
+
+XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+DIR="$XDG_RUNTIME_DIR/${APPPAUSER:-apppauser}"
+export SVDIR="$DIR"
+
+if ! pgrep -f "runsvdir $DIR" >/dev/null ; then
+    echo "There is no instance running"
+    exit 1
+fi
+
+# exit if there are no arguments
+[ -z "$1" ] && echo "Needs an argument" && exit 1
+
+while ! sv check "$1" >/dev/null 2>&1
+do
+    :
+done
+
+if [ -z "$2" ] ; then
+    if sv status "$1" | grep paused >/dev/null ; then
+        ACTION=cont
+    else
+        ACTION=pause
+    fi
+else
+    ACTION="$2"
+fi
+
+exec sv "$ACTION" "$1"
