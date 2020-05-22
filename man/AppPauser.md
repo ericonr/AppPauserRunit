@@ -54,6 +54,15 @@ between *running* and *paused*.
 
 *APPPAUSER*: the name of the supervision directory.
 
+# EXAMPLES
+
+## Steam games
+
+You can add a launch command to your Steam games, so that the service for a game
+always has the same name and you can bind a key to it.
+
+*SERVICE=steam KEEPALIVE=1 apppauser-launch %command%*
+
 # AUTHOR
 
 Érico Nogueira <ericonr@disroot.org>
